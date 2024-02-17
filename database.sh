@@ -10,6 +10,16 @@ function dirExists() {
   fi
 }
 
+# Checks if given file exists
+# Accepts one argument $1 (file)
+function fileExists() {
+  if [ -f "$1" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 # Creates a new table into the database
 # Accepts one argument $1 (table_name)
 function createTable() {
@@ -24,6 +34,21 @@ function createTable() {
     mkdir "tables"
     mkdir "tables/$1"
     echo "✅ Table created succesfully!"
+  fi
+}
+
+# Inserts data into a table
+# Accepts two arguments $1 (table_name), $2 (value_name)
+function insertInTable() {
+  if dirExists "$(pwd)/tables/$1"; then
+    if fileExists "$(pwd)/tables/$1/$2"; then
+      echo "❌ A value with this name already exists in this table!"
+      return
+    fi
+    touch "$(pwd)/tables/$1/$2"
+    echo "✅ $2 created succesfully table $1!"
+  else
+    echo "❌ Table $1 does not exist in database!"
   fi
 }
 
@@ -53,5 +78,7 @@ else
   # If given arguments are greater than 3, starts checking instructions
   if [[ "$1" == "create" && "$2" == "table" ]]; then
     createTable "$3"
+  elif [[ "$1" == "insert" ]]; then
+    insertInTable "$2" "$3"
   fi
 fi
