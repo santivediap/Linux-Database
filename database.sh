@@ -1,5 +1,32 @@
 #!/bin/bash
 
+# Checks if given directory exists
+# Accepts one argument $1 (directory)
+function dirExists() {
+  if [ -d "$1" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Creates a new table into the database
+# Accepts one argument $1 (table_name)
+function createTable() {
+  if dirExists "$(pwd)/tables"; then
+    if dirExists "$(pwd)/tables/$1"; then
+      echo "❌️ Table already exists!"
+      return
+    fi
+    mkdir "tables/$1"
+    echo "✅ Table created succesfully!"
+  else
+    mkdir "tables"
+    mkdir "tables/$1"
+    echo "✅ Table created succesfully!"
+  fi
+}
+
 # Checks if there is not arguments in the command
 if [[ "$#" -eq 0 ]]; then
   echo "❌️ You did not set enough arguments! ❔️ Need help? Use bash database.sh help"
@@ -21,5 +48,10 @@ else
   if [[ "$#" -lt 3 ]]; then
     echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
     exit
+  fi
+
+  # If given arguments are greater than 3, starts checking instructions
+  if [[ "$1" == "create" && "$2" == "table" ]]; then
+    createTable "$3"
   fi
 fi
