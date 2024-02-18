@@ -46,7 +46,7 @@ function insertInTable() {
       return
     fi
     touch "$(pwd)/tables/$1/$2"
-    echo "✅ $2 created succesfully table $1!"
+    echo "✅ $2 created succesfully in table $1!"
   else
     echo "❌ Table $1 does not exist in database!"
   fi
@@ -63,6 +63,22 @@ function deleteTable() {
   fi
 }
 
+# Deletes a table value
+# Accepts two arguments $1 (table_name), $2 (value_name)
+function deleteTableValue() {
+  if dirExists "$(pwd)/tables/$1"; then
+    if fileExists "$(pwd)/tables/$1/$2"; then
+      rm "$(pwd)/tables/$1/$2"
+      echo "✅ Value $1 deleted from table $1 succesfully!"
+    else
+      echo "❌ A value with this name does not exist in this table!"
+      return
+    fi
+  else
+    echo "❌ Table $1 does not exist in database!"
+  fi
+}
+
 # Checks if there is not arguments in the command
 if [[ "$#" -eq 0 ]]; then
   echo "❌️ You did not set enough arguments! ❔️ Need help? Use bash database.sh help"
@@ -74,7 +90,8 @@ if [[ "$1" == "help" ]]; then
   echo "------------------------------------------------ ❔ Commands Guide ❔ ------------------------------------------------"
   echo "· create table ( table_name ) -> Creates a new table"
   echo "· insert ( table_name ) ( value_name ) -> Inserts a new value into an existing table"
-  echo "· delete [ table | table_value ] ( value_name ) -> Deletes a table (or a table value) whose name equals value_name"
+  echo "· delete table ( table_name ) -> Deletes a table whose name equals table_name"
+  echo "· delete table_value ( table_name ) ( value_name ) -> Deletes a table value whose name equals value_name"
   echo "· list-tables -> Lists all existing tables"
   echo "· list-tables-values ( table_name ) -> Lists all values from an existing table"
   echo "----------------------------------------------------------------------------------------------------------------------"
@@ -94,6 +111,8 @@ else
   elif [[ "$1" == "delete" ]]; then
     if [[ "$2" == "table" ]]; then
       deleteTable "$3"
+    elif [[ "$2" == "table_value" ]]; then
+      deleteTableValue "$3" "$4"
     fi
   fi
 fi
