@@ -120,7 +120,7 @@ if [[ "$1" == "help" ]]; then
   echo "· create table ( table_name ) -> Creates a new table"
   echo "· insert ( table_name ) ( value_name ) -> Inserts a new value into an existing table"
   echo "· delete table ( table_name ) -> Deletes a table whose name equals table_name"
-  echo "· delete table_value ( table_name ) ( value_name ) -> Deletes a table value whose name equals value_name"
+  echo "· delete table-value ( table_name ) ( value_name ) -> Deletes a table value whose name equals value_name"
   echo "· list-tables -> Lists all existing tables"
   echo "· list-table-values ( table_name ) -> Lists all values from an existing table"
   echo "----------------------------------------------------------------------------------------------------------------------"
@@ -146,7 +146,7 @@ else
     fi
     if [[ "$2" == "table" ]]; then
       deleteTable "$3"
-    elif [[ "$2" == "table_value" ]]; then
+    elif [[ "$2" == "table-value" ]]; then
       deleteTableValue "$3" "$4"
     fi
   elif [[ "$1" == "list-tables" ]]; then
