@@ -93,6 +93,21 @@ function listTables() {
   fi
 }
 
+# Lists values from existing table
+# Accepts one argument $1 (table_name)
+function listTableValues() {
+  if dirExists "$(pwd)/tables/$1"; then
+    if [[ "$(ls  -1 $(pwd)/tables/$1 | wc -l)" -eq 0 ]]; then
+      echo "❌ There are no values in table $1!"
+    else
+      echo "---------- 📂 Values in table $1 📂 ----------"
+      echo "$(ls  -1 $(pwd)/tables/$1)"
+    fi
+  else
+    echo "❌ Table $1 does not exist in database!"
+  fi
+}
+
 # Checks if there is not arguments in the command
 if [[ "$#" -eq 0 ]]; then
   echo "❌️ You did not set enough arguments! ❔️ Need help? Use bash database.sh help"
@@ -107,7 +122,7 @@ if [[ "$1" == "help" ]]; then
   echo "· delete table ( table_name ) -> Deletes a table whose name equals table_name"
   echo "· delete table_value ( table_name ) ( value_name ) -> Deletes a table value whose name equals value_name"
   echo "· list-tables -> Lists all existing tables"
-  echo "· list-tables-values ( table_name ) -> Lists all values from an existing table"
+  echo "· list-table-values ( table_name ) -> Lists all values from an existing table"
   echo "----------------------------------------------------------------------------------------------------------------------"
  exit
 else
@@ -129,7 +144,6 @@ else
       echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
       exit
     fi
-
     if [[ "$2" == "table" ]]; then
       deleteTable "$3"
     elif [[ "$2" == "table_value" ]]; then
@@ -137,5 +151,11 @@ else
     fi
   elif [[ "$1" == "list-tables" ]]; then
     listTables
+  elif [[ "$1" == "list-table-values" ]]; then
+    if [[ "$#" -lt 2 ]]; then
+      echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
+      exit
+    fi
+    listTableValues "$2"
   fi
 fi
