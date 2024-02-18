@@ -79,6 +79,20 @@ function deleteTableValue() {
   fi
 }
 
+# Lists existing tables in database
+function listTables() {
+  if dirExists "$(pwd)/tables"; then
+    if [[ "$(ls  -1 $(pwd)/tables | wc -l)" -eq 0 ]]; then
+      echo "❌ There are no tables in the database!"
+    else
+      echo "---------- 📂️ Tables in database 📂️ ----------"
+      echo "$(ls  -1 $(pwd)/tables)"
+    fi
+  else
+    echo "❌ There are no tables in the database!"
+  fi
+}
+
 # Checks if there is not arguments in the command
 if [[ "$#" -eq 0 ]]; then
   echo "❌️ You did not set enough arguments! ❔️ Need help? Use bash database.sh help"
@@ -97,22 +111,31 @@ if [[ "$1" == "help" ]]; then
   echo "----------------------------------------------------------------------------------------------------------------------"
  exit
 else
-  # If first argument is not help and given arguments are less than 3, send error
-  if [[ "$#" -lt 3 ]]; then
-    echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
-    exit
-  fi
-
   # If given arguments are greater than 3, starts checking instructions
   if [[ "$1" == "create" && "$2" == "table" ]]; then
+    if [[ "$#" -lt 3 ]]; then
+      echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
+      exit
+    fi
     createTable "$3"
   elif [[ "$1" == "insert" ]]; then
+    if [[ "$#" -lt 3 ]]; then
+      echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
+      exit
+    fi
     insertInTable "$2" "$3"
   elif [[ "$1" == "delete" ]]; then
+    if [[ "$#" -lt 3 ]]; then
+      echo "❌ You did not set enough arguments! ❔ Need help? Use bash database.sh help"
+      exit
+    fi
+
     if [[ "$2" == "table" ]]; then
       deleteTable "$3"
     elif [[ "$2" == "table_value" ]]; then
       deleteTableValue "$3" "$4"
     fi
+  elif [[ "$1" == "list-tables" ]]; then
+    listTables
   fi
 fi
