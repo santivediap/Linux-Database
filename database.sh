@@ -52,6 +52,17 @@ function insertInTable() {
   fi
 }
 
+# Deletes an existing table
+# Accepts one argument $1 (table_name)
+function deleteTable() {
+  if dirExists "$(pwd)/tables/$1"; then
+    rm -rf "$(pwd)/tables/$1"
+    echo "✅ Table $1 deleted succesfully!"
+  else
+    echo "❌ Table $1 does not exist in database!"
+  fi
+}
+
 # Checks if there is not arguments in the command
 if [[ "$#" -eq 0 ]]; then
   echo "❌️ You did not set enough arguments! ❔️ Need help? Use bash database.sh help"
@@ -80,5 +91,9 @@ else
     createTable "$3"
   elif [[ "$1" == "insert" ]]; then
     insertInTable "$2" "$3"
+  elif [[ "$1" == "delete" ]]; then
+    if [[ "$2" == "table" ]]; then
+      deleteTable "$3"
+    fi
   fi
 fi
